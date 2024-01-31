@@ -111,8 +111,8 @@ class SST2Dataset(Dataset):
         
     def load_dataset(self, path, **kwargs):
         #d = load_dataset('glue', 'sst2')
-        d1 = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/sst2",split="train")
-        d2 = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/sst2",split="validation")
+        d1 = load_dataset(path="large_models/data/sst2",split="train")
+        d2 = load_dataset(path="large_models/data/sst2",split="validation")
         #d = load_dataset(path="csv", data_files={'train':['data/SST2/train.csv'],'validation':'data/SST2/dev.csv'})
         #ds = load_dataset('csv', data_files='path/to/local/my_dataset.csv')
         # train_d = d["train"]
@@ -142,8 +142,8 @@ class CopaDataset(Dataset):
         self.load_dataset(subtask, **kwargs)
         
     def load_dataset(self, path, **kwargs):
-        train_examples = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/copa",split="train")
-        valid_examples = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/copa",split="validation")
+        train_examples = load_dataset(path="large_models/data/copa",split="train")
+        valid_examples = load_dataset(path="large_models/data/copa",split="validation")
     
         train_samples = [self.build_sample(example) for example in train_examples]
         valid_samples = [self.build_sample(example) for example in valid_examples]
@@ -170,8 +170,8 @@ class BoolQDataset(Dataset):
         self.load_dataset(subtask, **kwargs)
     
     def load_dataset(self, path, **kwargs):
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/boolq",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/boolq",split="validation")
+        train_set = load_dataset(path="large_models/data/boolq",split="train")
+        valid_set = load_dataset(path="large_models/data/boolq",split="validation")
         # d = load_dataset("boolq")
         # train_set = d["train"]
         # valid_set = d["validation"]
@@ -200,8 +200,8 @@ class MultiRCDataset(Dataset):
         self.load_dataset(subtask, **kwargs)
     
     def load_dataset(self, path, **kwargs):
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/multirc",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/multirc",split="validation")
+        train_set = load_dataset(path="large_models/data/multirc",split="train")
+        valid_set = load_dataset(path="large_models/data/multirc",split="validation")
         # d = load_dataset("super_glue", "multirc")
         # train_set = d["train"]
         # valid_set = d["validation"]
@@ -230,8 +230,8 @@ class CBDataset(Dataset):
         self.load_dataset(subtask, **kwargs)
     
     def load_dataset(self, path, **kwargs):
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/cb",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/cb",split="validation")
+        train_set = load_dataset(path="large_models/data/cb",split="train")
+        valid_set = load_dataset(path="/large_models/data/cb",split="validation")
         # d = load_dataset("super_glue", "cb")
         # train_set = d["train"]
         # valid_set = d["validation"]
@@ -263,8 +263,8 @@ class WICDataset(Dataset):
         # d = load_dataset("super_glue", "wic")
         # train_set = d["train"]
         # valid_set = d["validation"]
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/wic",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/wic",split="validation")
+        train_set = load_dataset(path="large_models/data/wic",split="train")
+        valid_set = load_dataset(path="large_models/data/wic",split="validation")
 
         train_samples = [self.build_sample(example) for example in train_set]
         valid_samples = [self.build_sample(example) for example in valid_set]
@@ -290,8 +290,8 @@ class WSCDataset(Dataset):
         self.load_dataset(subtask, **kwargs)
     
     def load_dataset(self, path, **kwargs):
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/wsc.fixed",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/wsc.fixed",split="validation")
+        train_set = load_dataset(path="large_models/data/wsc.fixed",split="train")
+        valid_set = load_dataset(path="large_models/data/wsc.fixed",split="validation")
         # d = load_dataset("super_glue", "wsc.fixed")
         # train_set = d["train"]
         # valid_set = d["validation"]
@@ -320,8 +320,8 @@ class ReCoRDDataset(Dataset):
         self.load_dataset(subtask, **kwargs)
     
     def load_dataset(self, path, **kwargs):
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/record",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/record",split="validation")
+        train_set = load_dataset(path="large_models/data/record",split="train")
+        valid_set = load_dataset(path="large_models/data/record",split="validation")
         # d = load_dataset("super_glue", "record")
         # train_set = d["train"]
         # valid_set = d["validation"]
@@ -353,8 +353,8 @@ class RTEDataset(Dataset):
         # d = load_dataset("super_glue", "rte")
         # train_set = d["train"]
         # valid_set = d["validation"]
-        train_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/rte",split="train")
-        valid_set = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/rte",split="validation")
+        train_set = load_dataset(path="large_models/data/rte",split="train")
+        valid_set = load_dataset(path="large_models/data/rte",split="validation")
 
         train_samples = [self.build_sample(example) for example in train_set]
         valid_samples = [self.build_sample(example) for example in valid_set]
@@ -385,8 +385,8 @@ class SQuADDataset(Dataset):
         # dataset = load_dataset("squad")
         # train_examples = dataset["train"]
         # valid_examples = dataset["validation"]
-        train_examples = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/squad",split="train")
-        valid_examples = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/squad",split="validation")
+        train_examples = load_dataset(path="large_models/data/squad",split="train")
+        valid_examples = load_dataset(path="large_models/data/squad",split="validation")
 
         train_samples = [self.build_sample(example, idx) for idx, example in enumerate(train_examples)]
         valid_samples = [self.build_sample(example, idx) for idx, example in enumerate(valid_examples)]
@@ -423,8 +423,8 @@ class DROPDataset(Dataset):
         # dataset = load_dataset("drop")
         # train_examples = dataset["train"]
         # valid_examples = dataset["validation"]
-        train_examples = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/drop",split="train")
-        valid_examples = load_dataset(path="/slurm-files/zyj/MeZO/large_models_dsz/data/drop",split="validation")        
+        train_examples = load_dataset(path="large_models/data/drop",split="train")
+        valid_examples = load_dataset(path="large_models/data/drop",split="validation")        
 
         train_samples = [self.build_sample(example, idx) for idx, example in enumerate(train_examples)]
         valid_samples = [self.build_sample(example, idx) for idx, example in enumerate(valid_examples)]
