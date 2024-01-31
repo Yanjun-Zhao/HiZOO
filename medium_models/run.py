@@ -638,7 +638,7 @@ def main():
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    if training_args.sweep:#F
+    if training_args.sweep:
         now = datetime.now()
         dt_str = now.strftime('%m_%d_%H_%M_%S')
         training_args.output_dir = os.path.join(training_args.output_dir, dt_str)
@@ -646,16 +646,15 @@ def main():
     #if model_args.apply_lora:
     #    assert 'roberta' in model_args.model_name_or_path, 'LoRA only implemented for RoBERTa models'
 
-    if training_args.kernel_formula == 'asymmetric_signgd':#F
+    if training_args.kernel_formula == 'asymmetric_signgd':
         assert training_args.binary_classification, 'asymmetric solver not implemented for multi-class setting, use --binary_classification'
 
-    if training_args.optimizer_variant != '':#F
+    if training_args.optimizer_variant != '':
         assert training_args.optimizer == 'sgd', 'variants on optimizer are only implemented for SGD'
 
-    if 'prompt' in model_args.few_shot_type:#T
+    if 'prompt' in model_args.few_shot_type:
         data_args.prompt = True
-    
-    ###############debug-zyj
+
     training_args.local_rank = -1
 
     
@@ -934,10 +933,10 @@ def main():
 
     tokenizer.model_type = model.config.model_type
 
-    if training_args.exclude_first_layers != -1:#F
+    if training_args.exclude_first_layers != -1:
         model = convert_opt_model(model, config, training_args.exclude_first_layers)
 
-    if training_args.prefix_tuning:#F
+    if training_args.prefix_tuning:
         from src.prefix import PrefixTuning
         PrefixTuning(model, num_prefix=training_args.num_prefix, reparam=not training_args.no_reparam, float16=training_args.efficient_zero_order_fp16, init_by_real_act=training_args.prefix_init_by_real_act)
 
@@ -1041,7 +1040,6 @@ def main():
         model.sfc_bias = F.log_softmax(logits.squeeze(0).detach())
         logger.info("SFC bias: {}".format(model.sfc_bias))
 
-    #pdb.set_trace()
     # Training
     
     if training_args.do_train:
@@ -1086,11 +1084,8 @@ def main():
                 
                 # Now we just reload this from memory instead of disk <-- much faster
                 
-                ######################zyj
-                #pdb.set_trace()
                 trainer.model.load_state_dict(trainer.best_model_ckpt, strict=False)
     
-    #pdb.set_trace()
     # Evaluation
     final_result = {
         'time': str(datetime.today()),

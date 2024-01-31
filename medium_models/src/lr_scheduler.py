@@ -110,8 +110,6 @@ def get_polynomial_decay_schedule_with_warmup(learning_rate, name, num_warmup_st
         return decay / lr_init * learning_rate  # as LambdaLR multiplies by lr_init
 
 
-##################zyj
-
 def get_polynomial_decay_schedule(learning_rate, name, num_warmup_steps, num_decay_steps, current_step, num_training_steps):
     
     lr_init = learning_rate
