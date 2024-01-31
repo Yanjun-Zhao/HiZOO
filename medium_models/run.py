@@ -627,7 +627,6 @@ class MyDataCollatorWithPadding:
             batch["sfc_mask_pos"] = sfc_batch["mask_pos"]
         return batch
 
-import pdb
 def main():
     
     parser = HfArgumentParser((ModelArguments, DynamicDataTrainingArguments, DynamicTrainingArguments))
@@ -654,15 +653,12 @@ def main():
 
     if 'prompt' in model_args.few_shot_type:
         data_args.prompt = True
-
     training_args.local_rank = -1
 
-    
-    
 
-    if training_args.no_train:#F
+    if training_args.no_train:
         training_args.do_train = False
-    if training_args.no_predict:#F
+    if training_args.no_predict:
         training_args.do_predict = False
 
     # Setup logging
@@ -674,7 +670,7 @@ def main():
 
     # Load prompt/template/mapping file
     if data_args.prompt:
-        if data_args.prompt_path is not None:#F
+        if data_args.prompt_path is not None:
             assert data_args.prompt_id is not None
             prompt_list = []
             with open(data_args.prompt_path) as f:
