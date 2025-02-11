@@ -23,7 +23,6 @@ from metrics import calculate_metric
 from utils import *
 from trainer import OurTrainer
 import random
-import pdb
 @dataclass
 class OurArguments(TrainingArguments):
     # dataset and sampling strategy
@@ -180,10 +179,8 @@ class Framework:
 
         # Load tokenizer
         tokenizer = AutoTokenizer.from_pretrained(self.args.model_name, use_fast=False)
-        
-        if self.args.model_name == '../opt-30b':
-            if tokenizer.pad_token is None:
-                tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+
+        tokenizer.pad_token_id = 0
         
         # HF tokenizer bug fix
         if "opt" in self.args.model_name:
@@ -338,7 +335,6 @@ class Framework:
             )
 
         # Calculate metrics 
-        #pdb.set_trace()
         metric_name = getattr(self.task, "metric_name", "accuracy")
         metrics = {metric_name: calculate_metric(predictions, metric_name)}
         return metrics
@@ -479,23 +475,21 @@ def main():
     task = get_task(args.task_name)
     train_sets = task.sample_train_sets(num_train=args.num_train, num_dev=args.num_dev, num_eval=args.num_eval, num_train_sets=args.num_train_sets, seed=args.train_set_seed)
 
-    
     # Initialize trainer and load model
     framework = Framework(args, task)
-    #pdb.set_trace()
-    if args.train_set_seed is not None or args.num_train_sets is not None:#T
+    if args.train_set_seed is not None or args.num_train_sets is not None:
         # Eval samples share one (or multiple) training set(s)
         for train_set_id, train_samples in enumerate(train_sets):
             train_set_seed = train_set_id if args.train_set_seed is None else args.train_set_seed
 
             # Sample eval samples
-            if args.num_eval is not None:#T
+            if args.num_eval is not None:
                 eval_samples = task.sample_subset(data_split="valid", seed=train_set_seed, num=args.num_eval)
             else:
                 eval_samples = task.valid_samples
 
-            if args.trainer != "none":#T
-                if args.num_dev is not None:#T
+            if args.trainer != "none":
+                if args.num_dev is not None:
                     # Dev samples
                     dev_samples = train_samples[-args.num_dev:] 
                     train_samples = train_samples[:-args.num_dev]
@@ -505,7 +499,7 @@ def main():
                 # Training
                 framework.train(train_samples, dev_samples if dev_samples is not None else eval_samples)
 
-                if not args.no_eval:#T
+                if not args.no_eval:
                     metrics = framework.evaluate([], eval_samples) # No in-context learning if there is training
                     if dev_samples is not None:
                         dev_metrics = framework.evaluate([], dev_samples) 
@@ -516,7 +510,7 @@ def main():
                 # Zero-shot / in-context learning
                 metrics = framework.evaluate(train_samples, eval_samples)
 
-            if not args.no_eval:#T
+            if not args.no_eval:
                 logger.info("===== Train set %d =====" % train_set_seed)
                 logger.info(metrics)
                 if args.local_rank <= 0:

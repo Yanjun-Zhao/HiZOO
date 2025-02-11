@@ -16,8 +16,6 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple, Un
 import copy
 from metrics import f1
 import numpy as np
-import pdb
-import wandb
 from tqdm.auto import tqdm
 from transformers import Trainer
 from sklearn.linear_model import LinearRegression, LogisticRegression, LogisticRegressionCV
@@ -195,19 +193,19 @@ class OurTrainer(Trainer):
         total_train_batch_size = args.train_batch_size * args.gradient_accumulation_steps * args.world_size #16*1*1
 
         len_dataloader = None
-        if has_length(train_dataloader): #T
-            len_dataloader = len(train_dataloader) #63
+        if has_length(train_dataloader): 
+            len_dataloader = len(train_dataloader) 
             num_update_steps_per_epoch = len_dataloader // args.gradient_accumulation_steps
-            num_update_steps_per_epoch = max(num_update_steps_per_epoch, 1)#63
-            num_examples = self.num_examples(train_dataloader) #1000
-            if args.max_steps > 0: #T
+            num_update_steps_per_epoch = max(num_update_steps_per_epoch, 1)
+            num_examples = self.num_examples(train_dataloader) 
+            if args.max_steps > 0: 
                 max_steps = args.max_steps #20000
                 num_train_epochs = args.max_steps // num_update_steps_per_epoch + int(
                     args.max_steps % num_update_steps_per_epoch > 0
                 ) #318
                 # May be slightly incorrect if the last batch in the training dataloader has a smaller size but it's
                 # the best we can do.
-                num_train_samples = args.max_steps * total_train_batch_size #20000*16
+                num_train_samples = args.max_steps * total_train_batch_size 
             else:
                 max_steps = math.ceil(args.num_train_epochs * num_update_steps_per_epoch)
                 num_train_epochs = math.ceil(args.num_train_epochs)
@@ -306,14 +304,14 @@ class OurTrainer(Trainer):
         self.callback_handler.optimizer = self.optimizer
         self.callback_handler.lr_scheduler = self.lr_scheduler
         self.callback_handler.train_dataloader = train_dataloader
-        if self.hp_name is not None and self._trial is not None: #F
+        if self.hp_name is not None and self._trial is not None: 
             # use self._trial because the SigOpt/Optuna hpo only call `_hp_search_setup(trial)` instead of passing trial
             # parameter to Train when using DDP.
             self.state.trial_name = self.hp_name(self._trial)
         if trial is not None:
             assignments = trial.assignments if self.hp_search_backend == HPSearchBackend.SIGOPT else trial
             self.state.trial_params = hp_params(assignments)
-        else: #T
+        else: 
             self.state.trial_params = None
         # This should be the same if the state has been saved but in case the training arguments changed, it's safer
         # to set this after the load.
@@ -357,9 +355,9 @@ class OurTrainer(Trainer):
             zo_learning_rate = zo_lr_scheduler(self.args.learning_rate, self.args.zo_lr_scheduler_type, self.args.warmup_step, self.args.decay_step, self.state.global_step, int(num_train_epochs))
             Hessian_smooth = Hessian_smooth_scheduler(self.args.hessian_smooth_type, self.state.global_step, int(num_train_epochs))
             
-            if isinstance(train_dataloader, DataLoader) and isinstance(train_dataloader.sampler, DistributedSampler):#F
+            if isinstance(train_dataloader, DataLoader) and isinstance(train_dataloader.sampler, DistributedSampler):
                 train_dataloader.sampler.set_epoch(epoch)
-            elif hasattr(train_dataloader, "dataset") and isinstance(train_dataloader.dataset, IterableDatasetShard):#F
+            elif hasattr(train_dataloader, "dataset") and isinstance(train_dataloader.dataset, IterableDatasetShard):
                 train_dataloader.dataset.set_epoch(epoch)
 
             if is_torch_tpu_available():
@@ -408,7 +406,7 @@ class OurTrainer(Trainer):
                 ):
                     # if loss is nan or inf simply add the average of previous logged losses
                     tr_loss += tr_loss / (1 + self.state.global_step - self._globalstep_last_logged)
-                else:  #T
+                else:  
                     tr_loss += tr_loss_step
 
                 self.current_flos += float(self.floating_point_ops(inputs))
@@ -496,12 +494,10 @@ class OurTrainer(Trainer):
             model = self.efficient_Hessian_perturb_parameters(model, random_seed, self.Hessian_matrix, scaling_factor=1)
             loss1 = self.zo_forward(model, inputs)
 
-
             # second function evaluation
             model = self.efficient_Hessian_perturb_parameters(model, random_seed, self.Hessian_matrix, scaling_factor=-2)
             loss2 = self.zo_forward(model, inputs)
                      
-
             model = self.efficient_Hessian_perturb_parameters(model, random_seed, self.Hessian_matrix, scaling_factor=1)
             
             torch.manual_seed(random_seed)
