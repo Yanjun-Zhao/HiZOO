@@ -1,4 +1,4 @@
-# Second-Order Fine-Tuning without Pain for LLMs: a Hessian Informed Zeroth-Order Optimizer(ICLR 2025)
+# Second-Order Fine-Tuning without Pain for LLMs: a Hessian Informed Zeroth-Order Optimizer([ICLR 2025](https://arxiv.org/pdf/2402.15173))
 
 
 In this work, we propose a diagonal
@@ -42,3 +42,12 @@ CUDA_VISIBLE_DEVICES=0 MODEL=facebook/opt-13b TASK=WSC MODE=ft LR=1e-6 EPS=1e-3 
 
 ```
 
+##Citation
+```bash
+@article{zhao2024second,
+  title={Second-order fine-tuning without pain for llms: A hessian informed zeroth-order optimizer},
+  author={Zhao, Yanjun and Dang, Sizhe and Ye, Haishan and Dai, Guang and Qian, Yi and Tsang, Ivor W},
+  journal={arXiv preprint arXiv:2402.15173},
+  year={2024}
+}
+```

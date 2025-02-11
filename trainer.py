@@ -672,10 +672,6 @@ class OurTrainer(Trainer):
             # config `stage3_gather_16bit_weights_on_model_save` is True
             self.deepspeed.save_checkpoint(output_dir)
 
-        # Save optimizer and scheduler
-        # if self.sharded_ddp == ShardedDDPOption.SIMPLE:
-        #     self.optimizer.consolidate_state_dict()
-
         if is_torch_tpu_available():
             xm.rendezvous("saving_optimizer_states")
             xm.save(self.optimizer.state_dict(), os.path.join(output_dir, OPTIMIZER_NAME))

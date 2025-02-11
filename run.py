@@ -505,7 +505,7 @@ def main():
                         dev_metrics = framework.evaluate([], dev_samples) 
                         for m in dev_metrics:
                             metrics["dev_" + m] = dev_metrics[m]
-            else:#F
+            else:
                 assert args.num_dev is None
                 # Zero-shot / in-context learning
                 metrics = framework.evaluate(train_samples, eval_samples)
